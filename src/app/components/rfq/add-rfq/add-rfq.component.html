@@ -1,0 +1,118 @@
+<div class="card text-center">
+    <div class="card-header">
+        <h3 class="float-left">Devis</h3>
+
+    </div>
+
+    <div class="card-body">
+
+
+        <div class="card text-center">
+            <div class="card-header">
+                <h3 class="float-left">Reference</h3>
+
+            </div>
+
+            <div class="card-body">
+                <form>
+                    <div class="form-row align-items-center">
+
+                        <div class="col-auto">
+                            <label class="sr-only" for="inlineFormInputGroup">Client</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">CL</div>
+                                </div>
+                                <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Client">
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <label class="sr-only" for="inlineFormInputGroup">Date</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">D</div>
+                                </div>
+                                <input type="text" placeholder="Date" onfocus="(this.type='date')" class="form-control" id="inlineFormInputGroup">
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </form>
+            </div>
+
+
+
+
+
+            <div class="card-footer">
+
+            </div>
+        </div>
+
+        <div class="card text-center">
+            <div class="card-header">
+                <h3 class="float-left">Produits </h3>
+
+            </div>
+
+            <div class="card-body">
+                <app-rfq-input (newItemEvent)=addItem($event)></app-rfq-input>
+
+                <table class="table table-hover mt-4 ">
+                    <thead class="thead-custom ">
+                        <tr>
+                            <th scope="col ">RF</th>
+                            <th scope="col ">Designation </th>
+                            <th scope="col ">Quantite</th>
+                            <th scope="col ">Prix Unitaire</th>
+                            <th scope="col ">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let item of rfqItems">
+
+
+
+
+                        <tr>
+                            <td>{{item.product.ref}}</td>
+                            <td>{{item.product.label}}</td>
+                            <td>{{item.quantity}}</td>
+                            <td>{{item.unitPrice}}</td>
+                            <td>{{item.totalPrice}}</td>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+
+
+
+
+            <div class="card-footer ">
+                <h4 class="float-right"> Total = {{total}} TND</h4>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+    <div class="card-footer ">
+        <div class="form-row align-items-center float-right ">
+            <div class="col-xs-2 ">
+                <button type="submit " class="btn btn-custom mb-1 "><span class="fa fa-times "></span></button>
+            </div>
+
+            <div class="col-xs-2 ">
+                <button type="submit " class="btn btn-custom mb-1 "><span class="fa fa-check "></span></button>
+            </div>
+
+        </div>
+    </div>
+</div>

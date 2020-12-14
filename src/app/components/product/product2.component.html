@@ -1,0 +1,215 @@
+<div class="card text-center">
+    <div class="card-header">
+        <button class=" float-left btn btn-custom mr-4" (click)="open(mymodal)"><span class="fa fa-plus"></span></button>
+        <h3 class="float-left">Produits</h3>
+
+    </div>
+    <div class="card-body">
+
+        <table class="table table-hover">
+            <thead class="thead-custom ">
+                <tr>
+                    <th scope="col">REF</th>
+                    <th scope="col">Label</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Marque</th>
+                    <th scope="col">Fournisseur</th>
+                    <th scope="col">Categorie</th>
+                    <th scope="col">Prix Achat</th>
+                    <th scope="col">Prix Vente</th>
+                    <th scope="col">Quantité</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let p  of  products ">
+                    <td>{{p.ref|| "Marque"}}</td>
+                    <td>{{p.label|| "Marque"}}</td>
+                    <td>{{p.description}}</td>
+                    <td>{{p.brand.name || "Marque"}}</td>
+                    <td>{{p.providor.firstName +" "+ p.providor.lastName || "Marque"}}</td>
+                    <td> <span class="badge badge-ring badge-custom m-2" *ngFor="let c of p.categories  "> {{ c.name}} </span> </td>
+                    <td>{{p.price|| "Marque"}}</td>
+                    <td>{{p.margin|| "Marque"}}</td>
+                    <td> <span class="badge badge-pill" [ngClass]="{
+                         'badge-success': p.quantity > '10',
+                         'badge-warning': p.quantity < '11',
+                         'badge-danger': p.quantity ==  '0'                       
+                        
+                        }">
+                         
+                         {{p.quantity|| "0"}}</span></td>
+                    <td><a (click)="openConfirm(confirmModal,p)"><span class="fa fa-trash"></span></a><a (click)="openWithEntity(mymodal,p)" class="ml-2"><span class="fa fa-edit"></span></a></td>
+
+                </tr>
+
+            </tbody>
+        </table>
+
+
+    </div>
+    <div class="card-footer">
+        <nav class="float-right">
+            <ul *ngIf="pages?.length > 1" class="pagination">
+
+
+
+                <li class="page-item">
+                    <a (click)="paginate(currentPage-1,size)" class="page-link" tabindex="-1">Previous</a>
+                </li>
+                <li *ngFor="let p  of  pages; index as i" class="page-item" [ngClass]="i==currentPage?'active': ''">
+                    <a (click)="paginate(i,size)" class="page-link">{{i+1}}</a></li>
+
+                <li class="page-item">
+                    <a (click)="paginate(currentPage+1,size)" class="page-link">Next</a>
+                </li>
+
+
+
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<ng-template #mymodal let-modal>
+
+
+
+
+
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+
+        <div class="modal-header thead-custom ">
+            <h4 class="modal-title" id="modal-basic-title">{{ modalTitle }}</h4>
+            <a class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">×</span>
+            </a>
+
+        </div>
+        <div class="modal-body">
+
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Reference</label>
+                <input type="text" class="form-control" formControlName="ref" placeholder="RFxxxx" [ngClass]="{ 'is-invalid': submitted && f.ref.errors }">
+                <div *ngIf="submitted && f.ref.errors" class="invalid-feedback">
+                    <div *ngIf="f.ref.errors.required"> * Reference est obligatoire</div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Label</label>
+                <input type="text" class="form-control" formControlName="label" placeholder="Label" [ngClass]="{ 'is-invalid': submitted && f.label.errors }">
+                <div *ngIf="submitted && f.label.errors" class="invalid-feedback">
+                    <div *ngIf="f.label.errors.required"> * Label est obligatoire</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Description</label>
+                <textarea class="form-control " formControlName="description" placeholder="Description " [ngClass]="{ 'is-invalid': submitted && f.description.errors }"></textarea>
+                <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
+                    <div *ngIf="f.description.errors.required"> * Description est obligatoire</div>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="exampleFormControlInput1 ">Marque</label>
+                <select class="form-control " formControlName="brand" placeholder="Marque " [ngClass]="{ 'is-invalid': submitted && f.brand.errors }">
+                    <option  disabled [selected]="true"  value="0">Choisisez une Marque</option> 
+                    <option *ngFor="let b of brands " [value]="b.id" [selected]="b.id === productForm.value.brand.id">{{b.name }}</option>
+          </select>
+
+                <div *ngIf="submitted && f.brand.errors" class="invalid-feedback">
+                    <div *ngIf="f.brand.errors.required"> * Marque est obligatoire</div>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="exampleFormControlInput1 ">Fournisseur</label>
+                <select class="form-control " formControlName="providor" placeholder="Fournisseur " [ngClass]="{ 'is-invalid': submitted && f.providor.errors }">
+                    <option  disabled  [selected]="true" value="0">Choisisez un Fournisseur</option>
+
+                    <option *ngFor="let p of providors " [value]="p.id" [selected]="p.id === productForm.value.providor.id">{{p.firstName +" "+ p.lastName }}</option>
+          </select>
+
+                <div *ngIf="submitted && f.providor.errors" class="invalid-feedback">
+                    <div *ngIf="f.providor.errors.required"> * Fournisseur est obligatoire</div>
+                </div>
+            </div>
+
+
+            <div class="form-group ">
+                <label for="exampleFormControlInput1 ">Categories</label>
+
+                <select class="form-control categories" formControlName="categories" placeholder="Categories " [ngClass]="{ 'is-invalid': submitted && f.categories.errors }">
+                    <option  disabled   value="0">Choisisez une Categorie</option>
+ 
+                    <option *ngFor="let category of categories " [value]="category.id" [selected]="category.id === productForm.value.category.id" >{{category.name}}</option>
+          </select>
+
+                <div *ngIf="submitted && f.categories.errors" class="invalid-feedback">
+                    <div *ngIf="f.categories.errors.required"> * Categories est obligatoire</div>
+                </div>
+            </div>
+            <div class="form-row ">
+
+                <div class="form-group col-md-4 ">
+                    <label for="exampleFormControlInput1 ">Prix Achat</label>
+                    <input type="number " class="form-control " formControlName="price" placeholder="Prix Achat " [ngClass]="{ 'is-invalid': submitted && f.price.errors }">
+                    <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
+                        <div *ngIf="f.price.errors.required"> * Prix Achat est obligatoire</div>
+                    </div>
+
+                </div>
+                <div class="form-group col-md-4 ">
+                    <label for="exampleFormControlInput1 ">Marge</label>
+                    <input type="number " class="form-control " formControlName="margin" id="margin " placeholder="Marge" [ngClass]="{ 'is-invalid': submitted && f.margin.errors }">
+
+                    <div *ngIf="submitted && f.margin.errors" class="invalid-feedback">
+                        <div *ngIf="f.margin.errors.required"> * Marge est obligatoire</div>
+                    </div>
+                </div>
+                <div class="form-group col-md-4 ">
+                    <label for="exampleFormControlInput1 ">Quantité</label>
+                    <input type="number " class="form-control " formControlName="quantity" placeholder="Quantité " [ngClass]="{ 'is-invalid': submitted && f.quantity.errors }">
+                    <div *ngIf="submitted && f.quantity.errors" class="invalid-feedback">
+                        <div *ngIf="f.quantity.errors.required"> * Quantité est obligatoire</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer ">
+            <button type="button " class="btn btn-custom " (click)="modal.close( 'close click') "><span class="fa fa-times"></span></button>
+            <button type="submit " class="btn btn-custom "><span class="fa fa-check"></span></button>
+        </div>
+
+
+    </form>
+
+
+</ng-template>
+
+<ng-template #confirmModal let-modal>
+
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+
+        <div class="modal-header thead-custom ">
+            <h4 class="modal-title" id="modal-basic-title">{{ modalTitle }}</h4>
+            <a class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">×</span>
+            </a>
+
+        </div>
+
+        <div class="modal-body">
+            Vous etes sur de vouloir supprimer le produit de <span class="text-primary text-bold"> "RF: {{ product.ref }} "</span> ?
+        </div>
+
+        <div class="modal-footer ">
+            <button type="button " class="btn btn-custom " (click)="modal.close( 'close click') "><span class="fa fa-times"></span></button>
+            <button type="submit " class="btn btn-custom "><span class="fa fa-check"></span></button>
+        </div>
+    </form>
+</ng-template>

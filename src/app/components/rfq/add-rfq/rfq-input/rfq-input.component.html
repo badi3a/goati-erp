@@ -1,0 +1,51 @@
+<div class="form-row align-items-center">
+
+    <div class="col-xs-2">
+        <label class="sr-only" for="inlineFormInputGroup">Produit</label>
+        <div class="input-group mb-1">
+            <div class="input-group-prepend">
+                <div class="input-group-text">RF</div>
+            </div>
+            <select class="form-control" name="product" [(ngModel)]="selectedProduct" (change)="selected()">
+                    <option  disabled    >Choisisez un Produit</option>
+ 
+                    <option *ngFor="let product of products " [ngValue]="product" >{{product.label}}</option>
+          </select>
+
+        </div>
+    </div>
+    <div class="col-xs-2 sm-input">
+        <label class="sr-only" for="inlineFormInputGroup">Quantite</label>
+        <div class="input-group mb-1">
+            <div class="input-group-prepend">
+                <div class="input-group-text">Q</div>
+            </div>
+            <input type="number" [(ngModel)]="quantity" name="quantity" min="1" max="{{selectedProduct.quantity}}" class="form-control" id="inlineFormInputGroup" placeholder="Quantite" (ngModelChange)="calc()">
+        </div>
+    </div>
+
+    <div class=" col-xs-2 ">
+        <label class="sr-only " for="inlineFormInputGroup ">Prix Unitaire</label>
+        <div class="input-group mb-1 ">
+            <div class="input-group-prepend ">
+                <div class="input-group-text ">PU</div>
+            </div>
+            <input type="number " disabled [value]="unitPrice " class=" form-control " placeholder="Prix Unitaire ">
+        </div>
+    </div>
+
+    <div class="col-xs-2 ">
+        <label class="sr-only " for="inlineFormInputGroup ">Total</label>
+        <div class="input-group mb-1 ">
+            <div class="input-group-prepend ">
+                <div class="input-group-text ">T</div>
+            </div>
+            <input type="number " disabled [value]="totalPrice " class=" form-control " placeholder="Total ">
+        </div>
+    </div>
+
+
+    <div class="col-xs-2 ">
+        <button type="submit" (click)="submitNewItem()" class="btn btn-custom mb-1 "><span class="fa fa-plus "></span></button>
+    </div>
+</div>

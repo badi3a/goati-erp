@@ -1,0 +1,69 @@
+<div class="card text-center">
+    <div class="card-header">
+        <h3 class="float-left">Produits/category/{{categoryName}} ({{totalItems}})</h3>
+
+    </div>
+    <div class="card-body">
+
+        <table class="table table-hover">
+            <thead class="thead-custom ">
+                <tr>
+                    <th scope="col">REF</th>
+                    <th scope="col">Label</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Marque</th>
+                    <th scope="col">Fournisseur</th>
+                    <th scope="col">Categorie</th>
+                    <th scope="col">Prix Achat</th>
+                    <th scope="col">Prix Vente</th>
+                    <th scope="col">Quantité</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let p  of  products ">
+                    <td>{{p.ref|| "Marque"}}</td>
+                    <td>{{p.label|| "Marque"}}</td>
+                    <td>{{p.description}}</td>
+                    <td>{{p.brand.name || "Marque"}}</td>
+                    <td>{{p.providor.firstName +" "+ p.providor.lastName || "Marque"}}</td>
+                    <td> <span class="badge badge-ring badge-custom m-2"> {{ p.category.name}} </span> </td>
+                    <td>{{p.price|| "Marque"}}</td>
+                    <td>{{p.margin|| "Marque"}}</td>
+                    <td> <span class="badge badge-pill" [ngClass]="{
+                         'badge-success': p.quantity > '10',
+                         'badge-warning': p.quantity < '11',
+                         'badge-danger': p.quantity ==  '0'                       
+                        
+                        }">
+                         
+                         {{p.quantity|| "0"}}</span></td>
+
+                </tr>
+
+            </tbody>
+        </table>
+
+
+    </div>
+    <div class="card-footer">
+        <nav class="float-right">
+            <ul *ngIf="pages?.length > 1" class="pagination">
+
+
+
+                <li class="page-item">
+                    <a (click)="paginate(currentPage-1,size)" class="page-link" tabindex="-1">Previous</a>
+                </li>
+                <li *ngFor="let p  of  pages; index as i" class="page-item" [ngClass]="i==currentPage?'active': ''">
+                    <a (click)="paginate(i,size)" class="page-link">{{i+1}}</a></li>
+
+                <li class="page-item">
+                    <a (click)="paginate(currentPage+1,size)" class="page-link">Next</a>
+                </li>
+
+
+
+            </ul>
+        </nav>
+    </div>
+</div>

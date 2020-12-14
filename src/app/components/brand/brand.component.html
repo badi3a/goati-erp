@@ -1,0 +1,120 @@
+<div class="card text-center">
+    <div class="card-header">
+        <button class=" float-left btn btn-custom mr-4" (click)="open(mymodal)"><span class="fa fa-plus"></span></button>
+        <h3 class="float-left">Marques</h3>
+
+    </div>
+
+    <div class="card-body" *ngIf="brands == '' ">
+        <h3>No data Found !</h3>
+    </div>
+
+
+
+    <div class="card-body">
+
+        <table class="table table-hover">
+            <thead class="thead-custom">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">name</th>
+                    <th scope="col">Products</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+
+
+
+
+                <tr *ngFor="let b  of  brands; index as i ">
+                    <td>{{b.id}}</td>
+                    <td>{{b.name || "name"}}</td>
+                    <td>{{b.productsCount || "0" }}</td>
+                    <td><a (click)="openConfirm(confirmModal,b)"><span class="fa fa-trash"></span></a>
+                        <a class="ml-2" (click)="openWithEntity(mymodal,b)"><span class="fa fa-edit"></span></a>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+    </div>
+    <div class="card-footer">
+        <nav class="float-right">
+            <ul *ngIf="pages?.length > 1" class="pagination">
+
+
+
+                <li class="page-item">
+                    <a (click)="paginate(currentPage-1,size)" class="page-link" tabindex="-1">Previous</a>
+                </li>
+                <li *ngFor="let p  of  pages; index as i" class="page-item" [ngClass]="i==currentPage?'active': ''">
+                    <a (click)="paginate(i,size)" class="page-link">{{i+1}}</a></li>
+
+                <li class="page-item">
+                    <a (click)="paginate(currentPage+1,size)" class="page-link">Next</a>
+                </li>
+
+
+
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+<ng-template #mymodal let-modal>
+    <form [formGroup]="brandForm" (ngSubmit)="onSubmit()">
+
+
+        <div class="modal-header thead-custom">
+            <h4 class="modal-title" id="modal-basic-title"> {{ modalTitle }}</h4>
+            <a class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">×</span>
+            </a>
+        </div>
+        <div class="modal-body">
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Nom</label>
+                <input type="text" class="form-control" formControlName="name" placeholder="Nom" [ngClass]="{ 'is-invalid': submitted && f.name.errors }">
+
+                <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                    <div *ngIf="f.name.errors.required"> * Nom est obligatoire</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="modal-footer ">
+            <button type="button " class="btn btn-custom " (click)="modal.close( 'close click') "><span class="fa fa-times"></span></button>
+            <button type="submit " class="btn btn-custom "><span class="fa fa-check"></span></button>
+        </div>
+    </form>
+</ng-template>
+
+
+<ng-template #confirmModal let-modal>
+    <form [formGroup]="brandForm" (ngSubmit)="onSubmit()">
+
+        <div class="modal-header thead-custom ">
+            <h4 class="modal-title" id="modal-basic-title">{{ modalTitle }}</h4>
+            <a class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">×</span>
+            </a>
+
+        </div>
+
+        <div class="modal-body">
+            Vous etes sur de vouloir supprimer la marque <span class="text-primary text-bold" *ngIf="brand"> " {{ brand.name }} "</span> ?
+        </div>
+
+        <div class="modal-footer ">
+            <button type="button " class="btn btn-custom " (click)="modal.close( 'close click') "><span class="fa fa-times"></span></button>
+            <button type="submit " class="btn btn-custom "><span class="fa fa-check"></span></button>
+        </div>
+    </form>
+
+</ng-template>
